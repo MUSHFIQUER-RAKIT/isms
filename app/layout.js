@@ -2,6 +2,7 @@ import Aside from "@/components/Aside";
 import Header from "@/components/header/Header";
 import { getUiContent } from "@/lib/getUiContent";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,12 +28,11 @@ export default async function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ToastContainer position="bottom-right" autoClose={2000} />
         <Header navBar={navBar} />
         <Aside />
 
-        <main className="p-4  sm:ml-64 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-          {children}
-        </main>
+        <main className="p-4  sm:ml-64  ">{children}</main>
       </body>
     </html>
   );
