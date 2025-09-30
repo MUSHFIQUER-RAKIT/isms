@@ -1,27 +1,75 @@
-import EmployeeCard from "@/components/employee/EmployeeCard";
-import { UsersRound } from "lucide-react";
+"use client";
+import ProfileCard from "@/components/employee/ProfileCard";
+import { User } from "lucide-react"; // Example icons
+import { useEffect, useState } from "react";
 
-export default function EmployeePage() {
-  return (
-    <section>
-      <div>
-        <div>
-          <div className="flex items-center p-4 border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
-              <UsersRound size={18} />
-            </div>
-            <div>
-              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                Total Employee
-              </p>
-              <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                10
-              </p>
-            </div>
-          </div>
-        </div>
-        <EmployeeCard />
+// --- SUB-COMPONENT: Count Card (Top Left) ---
+const CountCard = ({ count }) => (
+  <div className="p-4 bg-white rounded-lg shadow-sm border mb-6 max-w-xs">
+    <div className="flex items-center space-x-3">
+      <div className="p-2 bg-orange-100 rounded-full text-orange-500">
+        <User size={24} />
       </div>
-    </section>
+      <div>
+        <p className="text-gray-500 text-sm">Total Employee</p>
+        <p className="text-2xl font-bold">{count}</p>
+      </div>
+    </div>
+  </div>
+);
+
+// --- MAIN COMPONENT ---
+export default function EmployeeList() {
+  const [data, setData] = useState({ totalEmployeeCount: 0, employee: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/employee");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="p-8">Loading employee data...</div>;
+  }
+
+  if (error) {
+    return <div className="p-8 text-red-600">Error: {error}</div>;
+  }
+
+  return (
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <CountCard count={data.totalEmployeeCount} />
+
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {data.employee.map((employee) => (
+          <ProfileCard
+            key={employee.id}
+            name={employee.name}
+            designation={employee.designation}
+            imageUrl={employee.image}
+            employeeId={employee.id}
+          />
+        ))}
+
+        {data.employee.length === 0 && (
+          <p className="text-gray-500 col-span-full">No employee found.</p>
+        )}
+      </div>
+    </div>
   );
 }

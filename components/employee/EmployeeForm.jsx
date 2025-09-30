@@ -18,6 +18,7 @@ export default function EmployeeForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setError(null);
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -26,21 +27,33 @@ export default function EmployeeForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
+
+    const dataToSend = { ...formData };
+    if (!dataToSend.employeeId) {
+      delete dataToSend.employeeId;
+    }
+
     try {
       const response = await fetch(`/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Registration failed");
 
-      console.log(response);
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Registration failed. Please check your input."
+        );
+      }
 
-      toast("Employee Added Succesfully");
+      toast("Registration Success:", data);
+
       setFormData({
         name: "",
         email: "",
@@ -48,13 +61,16 @@ export default function EmployeeForm() {
         employeeId: "",
         designation: "",
         phone: "",
+        role: "EMPLOYEE",
       });
     } catch (error) {
+      toast.error(error.message);
       setError(error.message);
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className=" min-h-screen -mt-28 flex place-content-center items-center justify-center p-4">
       <form
@@ -85,7 +101,7 @@ export default function EmployeeForm() {
             />
           </div>
 
-          <div>
+          <div className=" hidden">
             <label
               htmlFor="employeeId"
               className="block text-sm font-medium text-gray-700"
@@ -98,7 +114,6 @@ export default function EmployeeForm() {
               id="employeeId"
               value={formData.employeeId}
               onChange={handleChange}
-              required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="EMP-1001"
             />
@@ -200,12 +215,15 @@ export default function EmployeeForm() {
           </div>
         </div>
 
+        {error && <p className=" bg-red-400 text-red-700">{error}</p>}
+
         <div className="pt-4">
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
           >
-            Add Employee
+            {isSubmitting ? "Adding Employee..." : "Register Employee"}
           </button>
         </div>
       </form>
