@@ -1,8 +1,8 @@
 {
   "navBar": [
-    { "id": 1, "name": "Home", "href": "/" },
-    { "id": 2, "name": "About", "href": "/" },
-    { "id": 3, "name": "Add Employee", "href": "/employee/join" },
-    { "id": 4, "name": "Add Customer", "href": "/employee/join" }
+    { "id": 1, "name": "Dashboard", "href": "/dashboard" },
+    { "id": 2, "name": "Add Employee", "href": "/register" },
+    { "id": 3, "name": "Add Product", "href": "/dashboard/product" },
+    { "id": 4, "name": "Outreach", "href": "/dashboard/outreach" }
   ]
 }

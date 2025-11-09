@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌐 InnoCloud — World-Class Cloud Hosting Platform
 
-## Getting Started
+**InnoCloud** is a modern, high-performance cloud hosting and storage platform built with **Next.js 14**.  
+It provides secure, scalable, and lightning-fast solutions for web hosting, email, storage, and domain management — all wrapped in a sleek, dark-mode design.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- ⚡ **Fast & SEO-Optimized** with server-side rendering and structured metadata  
+- 🎨 **Modern UI** powered by CSS variables and Tailwind CSS  
+- 💬 **Animated UI Elements** using Framer Motion  
+- 🌍 **Dynamic Pricing Pages** with tabbed sections and monthly/yearly toggle  
+- 🧾 **Detailed Service Pages** for Cloud Hosting, Cloud Storage, and Cloud Solutions  
+- 🧩 **Custom Plan Form** with Request-Order submission  
+- 🧠 **Smart SEO Metadata** using Next.js `generateMetadata()`  
+- 📈 **Structured Data (JSON-LD)** for improved Google visibility  
+- 🌓 **Light/Dark Theme Support**
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏗️ Tech Stack
 
-## Learn More
+| Technology | Purpose |
+|-------------|----------|
+| **Next.js 14 (App Router)** | Framework for server & client rendering |
+| **React** | UI library |
+| **Tailwind CSS** | Styling framework |
+| **Framer Motion** | Page & card animations |
+| **TypeScript (optional)** | Static type safety |
+| **Node.js** | Runtime environment |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

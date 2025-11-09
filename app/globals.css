@@ -1,1 +1,98 @@
 @import "tailwindcss";
+
+@theme {
+  --color-background: hsl(262 83% 8%);
+  --color-foreground: hsl(270 20% 98%);
+
+  --color-card: hsl(262 60% 15%);
+  --color-card-foreground: hsl(270 20% 98%);
+
+  --color-popover: hsl(262 70% 12%);
+  --color-popover-foreground: hsl(270 20% 98%);
+
+  --color-primary: hsl(262 83% 58%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(262 30% 25%);
+  --color-secondary-foreground: hsl(270 20% 98%);
+
+  --color-muted: hsl(262 30% 20%);
+  --color-muted-foreground: hsl(262 10% 65%);
+
+  --color-accent: hsl(280 80% 65%);
+  --color-accent-foreground: hsl(0 0% 100%);
+
+  --color-destructive: hsl(0 84.2% 60.2%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  --color-border: hsl(262 30% 25%);
+  --color-input: hsl(262 40% 20%);
+  --color-ring: hsl(262 83% 58%);
+
+  --radius: 0.75rem;
+
+  /* Sidebar colors */
+  --color-sidebar-background: hsl(262 70% 10%);
+  --color-sidebar-foreground: hsl(270 20% 90%);
+  --color-sidebar-primary: hsl(262 83% 58%);
+  --color-sidebar-primary-foreground: hsl(0 0% 100%);
+  --color-sidebar-accent: hsl(262 50% 18%);
+  --color-sidebar-accent-foreground: hsl(270 20% 95%);
+  --color-sidebar-border: hsl(262 40% 20%);
+  --color-sidebar-ring: hsl(262 83% 58%);
+
+  /* Gradients and glass */
+  --gradient-bg: linear-gradient(
+    135deg,
+    hsl(262 83% 8%) 0%,
+    hsl(250 70% 12%) 50%,
+    hsl(262 80% 10%) 100%
+  );
+  --gradient-card: linear-gradient(
+    135deg,
+    hsl(262 50% 15% / 0.4) 0%,
+    hsl(280 60% 18% / 0.3) 100%
+  );
+  --glass-bg: hsl(262 60% 15% / 0.3);
+  --glass-border: hsl(262 50% 40% / 0.2);
+}
+
+/* ==========================
+   Base Layer
+   ========================== */
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    color: var(--color-foreground);
+    background: var(--gradient-bg);
+  }
+
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px 0 hsl(262 80% 10% / 0.37);
+  }
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+/* thin scrollbars */
+::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-weak);
+  border-radius: 999px;
+}
+
+button {
+  cursor: pointer;
+}
