@@ -15,7 +15,7 @@ export default function AddInstituteTypeForm({ properties = [] }) {
           <input
             value={institute}
             onChange={(e) => setInstitute(e.target.value)}
-            placeholder="Institution Type"
+            placeholder="institute Type"
             className="p-2 rounded-md bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-foreground)]"
           />
 
@@ -30,7 +30,7 @@ export default function AddInstituteTypeForm({ properties = [] }) {
               key={p.id}
               className="p-3 rounded-md bg-[var(--color-muted)] text-[var(--color-foreground)] border border-[var(--color-border)]"
             >
-              {p.region} — {p.institution_type}
+              {p.region} — {p.institute}
             </div>
           ))}
         </div>

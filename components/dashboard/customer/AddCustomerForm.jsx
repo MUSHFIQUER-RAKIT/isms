@@ -9,18 +9,14 @@ export default function AddCustomerForm({ properties = [] }) {
     phone: "",
     address: "",
     region: "",
-    institution_type: "",
+    institute: "",
   });
 
   const handleCustomerChange = (key, value) =>
     setCustomerForm((prev) => ({ ...prev, [key]: value }));
 
   const addCustomer = () => {
-    if (
-      !customerForm.name ||
-      !customerForm.region ||
-      !customerForm.institution_type
-    )
+    if (!customerForm.name || !customerForm.region || !customerForm.institute)
       return;
     setCustomers((prev) => [...prev, { id: prev.length + 1, ...customerForm }]);
     setCustomerForm({
@@ -29,7 +25,7 @@ export default function AddCustomerForm({ properties = [] }) {
       phone: "",
       address: "",
       region: "",
-      institution_type: "",
+      institute: "",
     });
   };
 
@@ -77,16 +73,14 @@ export default function AddCustomerForm({ properties = [] }) {
           ))}
         </select>
         <select
-          value={customerForm.institution_type}
-          onChange={(e) =>
-            handleCustomerChange("institution_type", e.target.value)
-          }
+          value={customerForm.institute}
+          onChange={(e) => handleCustomerChange("institute", e.target.value)}
           className="p-2 rounded-md bg-[var(--color-input)] border border-[var(--color-border)]"
         >
-          <option value="">Select Institution Type</option>
+          <option value="">Select institute Type</option>
           {properties.map((p) => (
-            <option key={p.id} value={p.institution_type}>
-              {p.institution_type}
+            <option key={p.id} value={p.institute}>
+              {p.institute}
             </option>
           ))}
         </select>

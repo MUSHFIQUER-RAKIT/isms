@@ -51,10 +51,10 @@ CREATE TABLE region (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- INSTITUTION TYPE TABLE
-CREATE TABLE institution_type (
+-- institute TYPE TABLE
+CREATE TABLE institute (
   id SERIAL PRIMARY KEY,
-  institution_type TEXT NOT NULL UNIQUE,
+  institute TEXT NOT NULL UNIQUE,
   created_by TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -69,13 +69,13 @@ CREATE TABLE customer (
   address TEXT,
   comment TEXT,
   region_id INT NOT NULL,
-  institution_type_id INT NOT NULL,
+  institute_id INT NOT NULL,
   created_by TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   FOREIGN KEY (region_id) REFERENCES region(id)
     ON UPDATE CASCADE ON DELETE RESTRICT,
-  FOREIGN KEY (institution_type_id) REFERENCES institution_type(id)
+  FOREIGN KEY (institute_id) REFERENCES institute(id)
     ON UPDATE CASCADE ON DELETE RESTRICT
 );
 

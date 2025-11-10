@@ -10,13 +10,13 @@ export async function GET() {
 
   try {
     const result = await pool.query(
-      "SELECT * FROM region ORDER BY created_at DESC"
+      "SELECT * FROM institute ORDER BY created_at DESC"
     );
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error("Error fetching locations:", error);
+    console.error("Error fetching institute:", error);
     return NextResponse.json(
-      { error: "Failed to fetch locations" },
+      { error: "Failed to fetch institute" },
       { status: 500 }
     );
   }
@@ -28,43 +28,44 @@ export async function POST(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { region } = await req.json();
+    const { institute } = await req.json();
 
-    if (!region) {
+    if (!institute) {
       return NextResponse.json(
-        { error: "Region is required" },
+        { error: "institute is required" },
         { status: 400 }
       );
     }
 
-    const exists = await pool.query("SELECT * FROM region WHERE region = $1", [
-      region,
-    ]);
+    const exists = await pool.query(
+      "SELECT * FROM institute WHERE institute = $1",
+      [institute]
+    );
     if (exists.rows.length > 0) {
       return NextResponse.json(
-        { error: "Region already exists" },
+        { error: "institute already exists" },
         { status: 400 }
       );
     }
 
     const insert = await pool.query(
-      "INSERT INTO region (region, created_by) VALUES ($1, $2) RETURNING *",
-      [region, session.user.name]
+      "INSERT INTO institute (institute, created_by) VALUES ($1, $2) RETURNING *",
+      [institute, session.user.name]
     );
 
     await addActivity({
       name: session.user.name,
       action: "Added",
-      target: `Region: ${region}`,
+      target: `institute: ${institute}`,
     });
     return NextResponse.json({
-      message: "Region added successfully",
+      message: "institute added successfully",
       data: insert.rows[0],
     });
   } catch (error) {
-    console.error("Error creating region:", error);
+    console.error("Error creating institute:", error);
     return NextResponse.json(
-      { error: "Failed to create region" },
+      { error: "Failed to create institute" },
       { status: 500 }
     );
   }
@@ -76,37 +77,40 @@ export async function PUT(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { id, region } = await req.json();
-    if (!region) {
+    const { id, institute } = await req.json();
+    if (!institute) {
       return NextResponse.json(
-        { error: "Region name is required" },
+        { error: "institute name is required" },
         { status: 400 }
       );
     }
 
     const updated = await pool.query(
-      "UPDATE region SET region = $1, updated_at = NOW() WHERE id = $2 RETURNING *",
-      [region, id]
+      "UPDATE institute SET institute = $1, updated_at = NOW() WHERE id = $2 RETURNING *",
+      [institute, id]
     );
 
     if (updated.rowCount === 0) {
-      return NextResponse.json({ error: "Region not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "institute not found" },
+        { status: 404 }
+      );
     }
 
     await addActivity({
       name: session.user.name,
       action: "Updated",
-      target: `Region to: ${region}`,
+      target: `institute to: ${institute}`,
     });
 
     return NextResponse.json({
-      message: "Region updated successfully",
+      message: "institute updated successfully",
       data: updated.rows[0],
     });
   } catch (error) {
-    console.error("Error updating region:", error);
+    console.error("Error updating institute:", error);
     return NextResponse.json(
-      { error: "Failed to update region" },
+      { error: "Failed to update institute" },
       { status: 500 }
     );
   }
@@ -122,24 +126,27 @@ export async function DELETE(req) {
     if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
 
     const deleted = await pool.query(
-      "DELETE FROM region WHERE id = $1 RETURNING *",
+      "DELETE FROM institute WHERE id = $1 RETURNING *",
       [id]
     );
 
     if (deleted.rowCount === 0) {
-      return NextResponse.json({ error: "Region not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "institute not found" },
+        { status: 404 }
+      );
     }
 
     await addActivity({
       name: session.user.name,
       action: "Deleted",
-      target: "Region",
+      target: "institute",
     });
-    return NextResponse.json({ message: "Region deleted successfully" });
+    return NextResponse.json({ message: "institute deleted successfully" });
   } catch (error) {
-    console.error("Error deleting region:", error);
+    console.error("Error deleting institute:", error);
     return NextResponse.json(
-      { error: "Failed to delete region" },
+      { error: "Failed to delete institute" },
       { status: 500 }
     );
   }

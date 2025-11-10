@@ -14,3 +14,19 @@ export async function getAllRegion() {
     throw new Error("Database error while fetching user.");
   }
 }
+export async function getAllInstitute() {
+  try {
+    const result = await query(
+      "SELECT * FROM institute ORDER BY created_at DESC"
+    );
+
+    if (result.rows.length === 0) {
+      return [];
+    }
+
+    return result.rows;
+  } catch (err) {
+    console.error("Error fetching user by ID:", err);
+    throw new Error("Database error while fetching user.");
+  }
+}

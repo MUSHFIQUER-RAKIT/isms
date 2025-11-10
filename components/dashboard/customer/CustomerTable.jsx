@@ -12,7 +12,7 @@ export default function CustomerTable({ customers = [] }) {
             <th className="p-2 text-left">Email</th>
             <th className="p-2 text-left">Phone</th>
             <th className="p-2 text-left">Region</th>
-            <th className="p-2 text-left">Institution</th>
+            <th className="p-2 text-left">institute</th>
             <th className="p-2 text-center">Action</th>
           </tr>
         </thead>
@@ -26,7 +26,7 @@ export default function CustomerTable({ customers = [] }) {
               <td className="p-2">{c.email}</td>
               <td className="p-2">{c.phone}</td>
               <td className="p-2">{c.region}</td>
-              <td className="p-2">{c.institution_type}</td>
+              <td className="p-2">{c.institute}</td>
               <td className="p-2 text-center">
                 <button className="text-[var(--color-destructive)] hover:opacity-70">
                   <FaTrash />

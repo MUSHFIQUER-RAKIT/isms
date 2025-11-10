@@ -1,11 +1,11 @@
 import AddCustomerForm from "@/components/dashboard/customer/AddCustomerForm";
-import AddInstituteTypeForm from "@/components/dashboard/customer/AddInstituteTypeForm";
-import AddRegionForm from "@/components/dashboard/customer/AddRegionForm";
+import AddPropertyForm from "@/components/dashboard/customer/AddPropertyForm";
 import CustomerTable from "@/components/dashboard/customer/CustomerTable";
-import { getAllRegion } from "@/data/query/region";
+import { getAllInstitute, getAllRegion } from "@/data/query/customer";
 
 export default async function CustomerPage() {
   const regions = await getAllRegion();
+  const institute = await getAllInstitute();
 
   return (
     <div className="min-h-screen   text-[var(--color-foreground)]">
@@ -13,9 +13,14 @@ export default async function CustomerPage() {
         Customer Management
       </h1>
 
-      <div className="bg-[var(--color-card)] border border-[var(--color-border)] flex flex-row  rounded-xl p-6 mb-8">
-        <AddRegionForm regions={regions} />
-        <AddInstituteTypeForm />
+      <div className="bg-[var(--color-card)] border border-[var(--color-border)] flex gap-2 flex-col md:flex-row   rounded-xl p-6 mb-8">
+        <AddPropertyForm title="Region" apiPath="region" items={regions} />
+
+        <AddPropertyForm
+          title="institute Type"
+          apiPath="institute"
+          items={institute}
+        />
       </div>
 
       <AddCustomerForm />
