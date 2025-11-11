@@ -102,12 +102,32 @@ EXECUTE PROCEDURE update_updated_at_column();
 -- ============================================================
 -- OUTREACH RECORDS
 -- ============================================================
+CREATE TABLE callhistory (
+  id SERIAL PRIMARY KEY,
+  customer_id INT NOT NULL ,
+  customer_name TEXT NOT NULL ,
+  customer_phone TEXT NOT NULL ,
+  created_by TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TRIGGER trigger_callhistory_updated_at
+BEFORE UPDATE ON callhistory
+FOR EACH ROW
+EXECUTE PROCEDURE update_updated_at_column();
+
 CREATE TABLE outreach (
   id SERIAL PRIMARY KEY,
   customer_id INT NOT NULL ,
-  users_id INT NOT NULL ,
-  initial_status TEXT NOT NULL,      
-  delivery_status TEXT,              
+  customer_name TEXT NOT NULL ,
+  customer_phone TEXT NOT NULL ,
+
+
+  call_status TEXT NOT NULL, -- pending, declined,successed  
+
+  service_status TEXT,   -- accepted , follow_up_date, cancled   
+
   follow_up_date TIMESTAMPTZ,
   note TEXT,
   created_by TEXT NOT NULL,

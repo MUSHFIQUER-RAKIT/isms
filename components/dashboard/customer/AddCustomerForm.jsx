@@ -2,11 +2,13 @@
 import { Button } from "@/components/common/Button";
 import Input2 from "@/components/common/Input2";
 import useApiActions from "@/hooks/useApiActions";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaEdit, FaEye, FaTrashAlt, FaUser } from "react-icons/fa";
+import { FaEdit, FaEye, FaPhone, FaTrashAlt, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 export default function AddCustomerForm({ regions, institutes, customers }) {
+  const router = useRouter();
   const [customerForm, setCustomerForm] = useState({
     name: "",
     email: "",
@@ -52,6 +54,32 @@ export default function AddCustomerForm({ regions, institutes, customers }) {
   async function handleDelete(id) {
     if (confirm(`Delete this customer?`))
       return await dataAction(null, "DELETE", { id });
+  }
+
+  async function makeCall(customer) {
+    const prepareData = {
+      customer_id: customer.id,
+      customer_name: customer.name,
+      customer_phone: customer.phone,
+    };
+    try {
+      const res = await fetch(`/api/dashboard/outrich/callhistory`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(prepareData),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        return toast.error(data.error || "Failed to post callhistory");
+      }
+
+      toast.success(data.message);
+      router.push("/dashboard/outrich");
+      return data;
+    } catch (error) {
+      console.error("POST error:", error.message);
+    }
   }
 
   return (
@@ -160,7 +188,15 @@ export default function AddCustomerForm({ regions, institutes, customers }) {
                       </Button>
                     )}
                   </td>
-                  <td className="p-2 text-center">
+                  <td className="p-2 flex gap-1  justify-center">
+                    <Button
+                      onClick={() => makeCall(c)}
+                      variant="glass"
+                      size="xs"
+                      className="text-green-600"
+                    >
+                      <FaPhone />
+                    </Button>
                     {editId === c.id ? (
                       <Button
                         onClick={() => {
