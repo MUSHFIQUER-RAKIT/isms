@@ -53,6 +53,9 @@ export function Button({
     case "sm":
       sizeClass = "h-9 rounded-md px-3";
       break;
+    case "md":
+      sizeClass = "h-10 rounded-md px-3";
+      break;
     case "lg":
       sizeClass = "h-11 rounded-md px-8";
       break;

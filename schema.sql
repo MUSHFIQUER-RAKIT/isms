@@ -68,15 +68,11 @@ CREATE TABLE customer (
   phone TEXT NOT NULL,
   address TEXT,
   comment TEXT,
-  region_id INT NOT NULL,
-  institute_id INT NOT NULL,
+  region TEXT NOT NULL,
+  institute TEXT NOT NULL,
   created_by TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  FOREIGN KEY (region_id) REFERENCES region(id)
-    ON UPDATE CASCADE ON DELETE RESTRICT,
-  FOREIGN KEY (institute_id) REFERENCES institute(id)
-    ON UPDATE CASCADE ON DELETE RESTRICT
+  updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 
@@ -108,11 +104,10 @@ EXECUTE PROCEDURE update_updated_at_column();
 -- ============================================================
 CREATE TABLE outreach (
   id SERIAL PRIMARY KEY,
-  customer_id INT NOT NULL REFERENCES customer(id) ON DELETE CASCADE,
-  users_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  -- product_id INT REFERENCES product(id) ON DELETE SET NULL,
-  initial_status TEXT NOT NULL,        -- Pending, Contacted, etc.
-  delivery_status TEXT,                -- Delivered, Pending, etc.
+  customer_id INT NOT NULL ,
+  users_id INT NOT NULL ,
+  initial_status TEXT NOT NULL,      
+  delivery_status TEXT,              
   follow_up_date TIMESTAMPTZ,
   note TEXT,
   created_by TEXT NOT NULL,
@@ -131,8 +126,8 @@ EXECUTE PROCEDURE update_updated_at_column();
 -- ============================================================
 CREATE TABLE comments (
   id SERIAL PRIMARY KEY,
-  outreach_id INT NOT NULL REFERENCES outreach(id) ON DELETE CASCADE,
-  users_id INT REFERENCES users(id) ON DELETE SET NULL,
+  outreach_id INT NOT NULL ,
+  users_id INT ,
   admin_comment TEXT,
   text TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),

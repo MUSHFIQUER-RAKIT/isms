@@ -3,6 +3,7 @@ import { Button } from "@/components/common/Button";
 import useApiActions from "@/hooks/useApiActions";
 import { useState } from "react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function AddPropertyForm({ title, apiPath, items = [] }) {
   const [value, setValue] = useState("");
@@ -11,7 +12,7 @@ export default function AddPropertyForm({ title, apiPath, items = [] }) {
   const dataAction = useApiActions();
 
   async function handleSubmit() {
-    if (!value.trim()) return alert(`Please enter a ${title}`);
+    if (!value.trim()) return toast.warning(`Please enter a ${title}`);
 
     if (editId) {
       await dataAction(apiPath, "PUT", { id: editId, [apiPath]: value }, () => {
@@ -39,13 +40,19 @@ export default function AddPropertyForm({ title, apiPath, items = [] }) {
       <div>
         <div className="flex flex-wrap gap-3 mb-4">
           <input
+            name="name"
             value={value}
             onChange={(e) => setValue(e.target.value.toLowerCase())}
             placeholder={title}
-            className="p-2 rounded-md bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-foreground)]"
+            className="p-2 w-2/3  rounded-md bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-foreground)]"
           />
 
-          <Button onClick={handleSubmit} variant="primary">
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            variant="primary"
+            size="md"
+          >
             {editId ? "Update" : "Add"}
           </Button>
         </div>

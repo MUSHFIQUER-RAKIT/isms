@@ -7,11 +7,14 @@ export default function useApiActions() {
 
   const dataAction = async (path, method, payload, callback) => {
     try {
-      const res = await fetch(`/api/dashboard/customer/${path}`, {
-        method: method || "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `/api/dashboard/customer${path ? `/${path}` : ""}`,
+        {
+          method: method || "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
       const data = await res.json();
 
       if (!res.ok) {
