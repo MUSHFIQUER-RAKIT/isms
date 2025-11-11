@@ -22,7 +22,7 @@ export default function Aside({ user }) {
       label: "Customer",
       href: "/dashboard/customer",
     },
-    { icon: <FaTable />, label: "Outrich", href: "/dashboard/outrich" },
+    { icon: <FaTable />, label: "Outreach", href: "/dashboard/outreach" },
     { icon: <FaUserFriends />, label: "Account", href: "/dashboard/account" },
     { icon: <FaCog />, label: "Settings", href: "/dashboard/settings" },
   ];

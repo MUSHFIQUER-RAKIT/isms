@@ -63,7 +63,7 @@ export default function AddCustomerForm({ regions, institutes, customers }) {
       customer_phone: customer.phone,
     };
     try {
-      const res = await fetch(`/api/dashboard/outrich/callhistory`, {
+      const res = await fetch(`/api/dashboard/outreach/callhistory`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(prepareData),
@@ -75,7 +75,7 @@ export default function AddCustomerForm({ regions, institutes, customers }) {
       }
 
       toast.success(data.message);
-      router.push("/dashboard/outrich");
+      router.push("/dashboard/outreach");
       return data;
     } catch (error) {
       console.error("POST error:", error.message);
