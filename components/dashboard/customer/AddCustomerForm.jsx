@@ -62,24 +62,6 @@ export default function AddCustomerForm({ regions, institutes, customers }) {
       customer_name: customer.name,
       customer_phone: customer.phone,
     };
-    try {
-      const res = await fetch(`/api/dashboard/outreach/callhistory`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(prepareData),
-      });
-      const data = await res.json();
-
-      if (!res.ok) {
-        return toast.error(data.error || "Failed to post callhistory");
-      }
-
-      toast.success(data.message);
-      router.push("/dashboard/outreach");
-      return data;
-    } catch (error) {
-      console.error("POST error:", error.message);
-    }
   }
 
   return (

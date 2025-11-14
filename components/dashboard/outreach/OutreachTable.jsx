@@ -1,4 +1,6 @@
-export default function ({ outreachData = [] }) {
+"use client";
+
+export default function ({ outreachs = [] }) {
   return (
     <div className="mt-10">
       <h3 className="text-xl font-semibold mb-3">Outreach Records</h3>
@@ -10,11 +12,11 @@ export default function ({ outreachData = [] }) {
             <th className="p-2">Call Status</th>
             <th className="p-2">Service Status</th>
             <th className="p-2">Follow Up</th>
-            <th className="p-2">Actions</th>
+            <th className="p-2">Notes</th>
           </tr>
         </thead>
         <tbody>
-          {outreachData.map((o) => (
+          {outreachs.map((o) => (
             <tr
               key={o.id}
               className="border-t border-[var(--color-border)] hover:bg-[var(--color-muted)]"
@@ -28,18 +30,7 @@ export default function ({ outreachData = [] }) {
                   ? new Date(o.follow_up_date).toLocaleDateString()
                   : "-"}
               </td>
-              <td className="p-2 flex gap-2">
-                <Button size="xs" onClick={() => alert("Edit coming soon")}>
-                  <FaEdit />
-                </Button>
-                <Button
-                  size="xs"
-                  variant="destructive"
-                  onClick={() => deleteOutreach(o.id)}
-                >
-                  <FaTrashAlt />
-                </Button>
-              </td>
+              <td className="p-2">{o.note}</td>
             </tr>
           ))}
         </tbody>

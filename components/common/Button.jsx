@@ -35,11 +35,12 @@ export function Button({
       variantClass = "hover:bg-accent hover:text-accent-foreground";
       break;
     case "link":
-      variantClass = "text-primary underline-offset-4 hover:underline";
+      variantClass = "text-primary underline-offset-4 hover:underline !h-0";
       break;
     case "glass":
       variantClass = "glass-card text-foreground hover:bg-primary/20";
       break;
+
     default:
       variantClass =
         "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/50";

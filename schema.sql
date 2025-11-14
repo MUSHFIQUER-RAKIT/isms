@@ -82,40 +82,10 @@ FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
 
 
--- ============================================================
--- PRODUCTS
--- ============================================================
--- CREATE TABLE product (
---   id SERIAL PRIMARY KEY,
---   type TEXT NOT NULL,
---   quantity INT,
---   created_at TIMESTAMPTZ DEFAULT NOW(),
---   updated_at TIMESTAMPTZ DEFAULT NOW()
--- );
-
--- CREATE TRIGGER trigger_product_updated_at
--- BEFORE UPDATE ON product
--- FOR EACH ROW
--- EXECUTE PROCEDURE update_updated_at_column();
-
 
 -- ============================================================
 -- OUTREACH RECORDS
 -- ============================================================
-CREATE TABLE callhistory (
-  id SERIAL PRIMARY KEY,
-  customer_id INT NOT NULL ,
-  customer_name TEXT NOT NULL ,
-  customer_phone TEXT NOT NULL ,
-  created_by TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE TRIGGER trigger_callhistory_updated_at
-BEFORE UPDATE ON callhistory
-FOR EACH ROW
-EXECUTE PROCEDURE update_updated_at_column();
 
 CREATE TABLE outreach (
   id SERIAL PRIMARY KEY,

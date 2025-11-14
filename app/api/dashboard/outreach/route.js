@@ -28,15 +28,32 @@ export async function POST(req) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const { customer_id, customer_name, customer_phone } = await req.json();
+    const {
+      customer_id,
+      customer_name,
+      customer_phone,
+      call_status,
+      service_status,
+      follow_up_date,
+      note,
+    } = await req.json();
 
     if (!customer_id || !customer_name || !customer_phone) {
       return NextResponse.json({ error: "Field is required" }, { status: 400 });
     }
 
     const insert = await pool.query(
-      "INSERT INTO outreach (customer_id, customer_name, customer_phone, call_status, created_by) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [customer_id, customer_name, customer_phone, "pending", session.user.name]
+      "INSERT INTO outreach (customer_id, customer_name, customer_phone,call_status ,service_status,follow_up_date,note,  created_by) VALUES ($1, $2, $3, $4 ,$5 ,$6 ,$7 ,$8) RETURNING *",
+      [
+        customer_id,
+        customer_name,
+        customer_phone,
+        call_status,
+        service_status,
+        follow_up_date,
+        note,
+        session.user.name,
+      ]
     );
 
     await addActivity({

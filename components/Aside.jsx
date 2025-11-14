@@ -1,18 +1,19 @@
 "use client";
 import { getSiteSettings } from "@/actions/server-actions";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  FaCog,
   FaRegListAlt,
   FaShoppingCart,
   FaSignOutAlt,
   FaTable,
   FaUserFriends,
 } from "react-icons/fa";
+import { FcComboChart, FcSettings } from "react-icons/fc";
 
 export default function Aside({ user }) {
   const menuItems = [
@@ -24,7 +25,12 @@ export default function Aside({ user }) {
     },
     { icon: <FaTable />, label: "Outreach", href: "/dashboard/outreach" },
     { icon: <FaUserFriends />, label: "Account", href: "/dashboard/account" },
-    { icon: <FaCog />, label: "Settings", href: "/dashboard/settings" },
+    { icon: <FcComboChart />, label: "Reports", href: "/dashboard/reports" },
+    {
+      icon: <FcSettings className=" hover:animate-spin" />,
+      label: "Settings",
+      href: "/dashboard/settings",
+    },
   ];
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -104,16 +110,35 @@ export default function Aside({ user }) {
             </h1>
 
             <div className="flex ">
-              <Link
-                href="/dashboard/settings"
-                onClick={() => setIsSidebarOpen(false)}
-                className="flex items-center gap-3 p-2 rounded-xl cursor-pointer  hover:bg-sidebar-accent"
+              <motion.div
+                whileHover="hover"
+                whileTap="tap"
+                transition={{ duration: 0.6, ease: "easeInOut" }}
               >
-                <span className="text-[var(--accent)] text-lg">
-                  <FaCog />
-                </span>
-                <span>Settings</span>
-              </Link>
+                <Link
+                  href="/dashboard/settings"
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="flex items-center gap-3 p-2 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
+                >
+                  <motion.span
+                    variants={{
+                      hover: { rotate: 90 },
+                      tap: { scale: 1.2 },
+                    }}
+                    transition={{
+                      duration: 0.6,
+                      ease: "easeInOut",
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 10,
+                    }}
+                    className="text-[var(--accent)] ml-4 text-lg"
+                  >
+                    <FcSettings />
+                  </motion.span>
+                  Settings
+                </Link>
+              </motion.div>
 
               <button
                 className=" pl-2 flex items-center gap-3 p-2 rounded-xl cursor-pointer  hover:bg-sidebar-accent hover:text-red-500"

@@ -1,9 +1,11 @@
 import MakeOutreach from "@/components/dashboard/outreach/MakeOutreach";
 import OutreachTable from "@/components/dashboard/outreach/OutreachTable";
 import { getAllCustomer } from "@/data/query/customer";
+import { getAllOutreach } from "@/data/query/outreach";
 
 export default async function OutreachPage() {
   const customers = await getAllCustomer();
+  const outreachs = await getAllOutreach();
 
   return (
     <div className="p-6 flex flex-col gap-8 text-[var(--color-foreground)]">
@@ -13,7 +15,7 @@ export default async function OutreachPage() {
 
       <MakeOutreach customers={customers} />
 
-      <OutreachTable />
+      <OutreachTable outreachs={outreachs} />
     </div>
   );
 }
