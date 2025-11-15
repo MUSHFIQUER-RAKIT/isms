@@ -14,48 +14,38 @@ export async function getAllReports(filter = {}, limit = 50) {
     switch (reportType) {
       case "region":
         table = "region";
-        // For simple tables like 'region' and 'institute', only 'created_by' filtering applies
         break;
       case "institute":
         table = "institute";
         break;
       case "customer":
         table = "customer";
-        // 'customer' table uses 'id' for the customer reference
         customerIdColumn = "id";
         break;
       case "outreach":
         table = "outreach";
-        // 'outreach' table uses 'customer_id' for the customer reference
         customerIdColumn = "customer_id";
         break;
       default:
-        // Handle case where report type is missing or unknown
         throw new Error("Invalid or missing report type.");
     }
 
-    // --- 2. Filtering Logic (Dynamic) ---
-
-    // Handle 'customer' filter (Only relevant for customer and outreach tables)
     if (filter.customer && customerIdColumn) {
       whereClauses.push(`${customerIdColumn} = $${index++}`);
       values.push(filter.customer);
     }
 
-    // Handle 'created by' filter (Relevant for all tables)
-    const createdByValue = filter["created by"] || filter.created_by;
-    if (createdByValue) {
-      // Assuming 'created_by' is a text field storing the creator's identifier
+    // ⭐ FIX APPLIED HERE: Check for filter.created instead of filter.created_by
+    if (filter.created) {
+      // Use filter.created value, but the SQL column is created_by
       whereClauses.push(`${createdByColumn} = $${index++}`);
-      values.push(createdByValue);
+      values.push(filter.created);
     }
 
+    let orderBy = "ORDER BY created_at DESC";
 
-    let orderBy = "ORDER BY created_at DESC"; // Default to Newest (sort=1)
+    const sortOption = filter.sort;
 
-    const sortOption = filter.sort; // The URL provides '3' for "This Month"
-
-    // Add date range filtering based on sort option 2, 3, or 4
     if (sortOption === "2") {
       // This Week
       whereClauses.push(`created_at >= NOW() - INTERVAL '7 days'`);

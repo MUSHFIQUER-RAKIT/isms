@@ -25,11 +25,11 @@ function formatValue(key, value) {
 export default function ReportTable({ reports, reportType }) {
   if (!reports || reports.length === 0) {
     return (
-      <div className="text-center p-8 bg-white shadow rounded-lg border border-gray-200">
-        <p className="text-lg font-semibold text-gray-700">
+      <div className="text-center p-8 bg-[var(--color-card)] shadow rounded-lg border border-border">
+        <p className="text-lg font-semibold ">
           No {reportType} reports found.
         </p>
-        <p className="text-gray-500">Try adjusting your filters.</p>
+        <p className="">Try adjusting your filters.</p>
       </div>
     );
   }

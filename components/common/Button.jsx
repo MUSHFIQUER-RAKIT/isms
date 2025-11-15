@@ -64,7 +64,7 @@ export function Button({
       sizeClass = "h-10 w-10";
       break;
     default:
-      sizeClass = "h-10 px-4 py-2";
+      sizeClass = "h-10 px-2 lg:px-4 py-2";
   }
 
   const classes = `${baseStyles} ${variantClass} ${sizeClass} ${className}`;

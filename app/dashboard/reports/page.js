@@ -15,10 +15,12 @@ export default async function ReportsPage({ searchParams }) {
     phone: c.phone,
   }));
 
-  const reportType = searchParams.report || "region";
-  const reports = await getAllReports({ ...searchParams, report: reportType });
+  const params = await searchParams;
+  const reportType = params.report || "region";
+  const reports = await getAllReports({ ...params, report: reportType });
+
   return (
-    <div className="p-6 flex flex-col gap-6">
+    <div className="lg:p-6 flex flex-col gap-6">
       <ReportsFilters customer={customer} createdBy={createdBy}>
         <ReportTable reports={reports} reportType={reportType} />
       </ReportsFilters>
