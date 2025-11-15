@@ -4,6 +4,7 @@ import Divider from "@/components/common/Divider";
 import LoadingTop from "@/components/common/LoadingTop";
 import { capitalizeFirstLetter } from "@/libs/capitalizeFirstLetter";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaPhone, FaSearch, FaSync } from "react-icons/fa";
 import { FcPhone } from "react-icons/fc";
@@ -12,13 +13,15 @@ import { toast } from "react-toastify";
 export default function MakeCallUI({ customers = [] }) {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [textArea, setTextArea] = useState("");
+  const router = useRouter();
   const [selectedCustomer, setSelectedCustomer] = useState({
     customer_id: "",
     customer_name: "",
     customer_phone: "",
     call_status: "",
     service_status: "",
-    follow_up_date: "",
+    follow_up_date: null,
     note: "",
   });
   function resetCustomer() {
@@ -28,9 +31,10 @@ export default function MakeCallUI({ customers = [] }) {
       customer_phone: "",
       call_status: "",
       service_status: "",
-      follow_up_date: "",
+      follow_up_date: null,
       note: "",
     });
+    setTextArea("");
   }
 
   const filteredCustomers = customers.filter((c) =>
@@ -46,7 +50,7 @@ export default function MakeCallUI({ customers = [] }) {
       const res = await fetch(`/api/dashboard/outreach`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedCustomer),
+        body: JSON.stringify({ ...selectedCustomer, note: textArea }),
       });
       const data = await res.json();
 
@@ -55,11 +59,13 @@ export default function MakeCallUI({ customers = [] }) {
       }
 
       toast.success(data.message);
-      setLoading(false);
+      router.refresh("/dashboard/outreach");
       resetCustomer();
       return data;
     } catch (error) {
       console.error("POST error:", error.message);
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -203,7 +209,13 @@ export default function MakeCallUI({ customers = [] }) {
                     })
                   }
                   className={status === "calling" && "animate-pulse"}
-                  variant={status === "calling" ? "" : "glass"}
+                  variant={
+                    status === "calling"
+                      ? ""
+                      : status === "calling"
+                      ? "destructive"
+                      : "glass"
+                  }
                 >
                   {status === "calling" ? (
                     <>
@@ -225,9 +237,9 @@ export default function MakeCallUI({ customers = [] }) {
             layout
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col gap-2"
+            className="flex  items-center gap-2"
           >
-            <label className="font-medium text-sm">Service Status</label>
+            <label className="font-medium text-sm">Service Status:</label>
 
             <div className="flex gap-3 flex-wrap">
               {["accepted", "follow_up", "cancelled"].map((s) => (
@@ -303,16 +315,11 @@ export default function MakeCallUI({ customers = [] }) {
               </div>
             </div>
 
-            {selectedCustomer.call_status && (
+            {selectedCustomer.service_status && (
               <>
                 <textarea
-                  value={selectedCustomer.note}
-                  onChange={(e) =>
-                    setSelectedCustomer({
-                      ...selectedCustomer,
-                      note: e.target.value,
-                    })
-                  }
+                  value={textArea}
+                  onChange={(e) => setTextArea(e.target.value)}
                   placeholder="Write a note (optional)..."
                   className="p-3 rounded-md bg-[var(--color-input)] border border-[var(--color-border)] shadow-sm min-h-[120px]"
                 />

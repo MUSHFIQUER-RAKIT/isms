@@ -73,7 +73,10 @@ export default function RegisterForm() {
         designation: "",
         phone: "",
       });
-      router.back();
+      router.refresh("/dashboard/account");
+      setTimeout(() => {
+        router.back();
+      }, 500);
     } catch (error) {
       toast.error(error.message);
       setError(error.message);

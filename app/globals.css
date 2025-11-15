@@ -87,9 +87,10 @@ body {
 ::-webkit-scrollbar {
   height: 10px;
   width: 10px;
+  background: var(--color-card);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-weak);
+  background: var(--color-accent);
   border-radius: 999px;
 }
 

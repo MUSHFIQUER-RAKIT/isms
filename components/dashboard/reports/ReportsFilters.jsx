@@ -43,11 +43,6 @@ export default function ReportsFilters({ customer, createdBy, children }) {
   const ref = useOutsideClick(() => setSortOpen(false));
 
   // --- FILTER HANDLER ---
-  const handleFilter = (sectionId, option) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(sectionId, option);
-    router.push(`?${params.toString()}`);
-  };
 
   const activeSort = searchParams.get("sort");
   const reportSort = searchParams.get("report") || "region";
@@ -57,6 +52,15 @@ export default function ReportsFilters({ customer, createdBy, children }) {
   const queryString = new URLSearchParams(searchParams.toString());
   const exportUrl = `/api/export?${queryString}`;
 
+  const handleFilter = (sectionId, option) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (isCreated) {
+      params.delete(sectionId);
+    } else {
+      params.set(sectionId, option);
+    }
+    router.push(`?${params.toString()}`);
+  };
   function onDeleteParams(name) {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(name);

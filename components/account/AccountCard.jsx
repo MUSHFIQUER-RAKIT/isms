@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Button } from "../common/Button";
 import Input from "../common/Input";
 
-export default function AccountCard({ employees }) {
+export default function AccountCard({ employees, isEmployee }) {
   const router = useRouter();
   //handle delete user
   const handleDeleteUser = async (id) => {
@@ -231,7 +231,7 @@ export default function AccountCard({ employees }) {
             return (
               <div
                 key={user?.id}
-                className="w-full sm:w-40 lg:w-52 xl:w-72 min-w-[250px] border border-[var(--color-border)] bg-[var(--color-card)] rounded-lg shadow-md hover:shadow-[var(--color-ring)]/30 transition-all duration-300"
+                className="w-full  sm:w-40 lg:w-52  min-w-[250px] border border-[var(--color-border)] bg-[var(--color-card)] rounded-lg shadow-md hover:shadow-[var(--color-ring)]/30 transition-all duration-300"
               >
                 {isEditing ? (
                   renderForm()
@@ -241,23 +241,28 @@ export default function AccountCard({ employees }) {
                       <FaUser />
                     </div>
 
-                    <h5 className="mt-3 mb-1 text-lg sm:text-xl font-semibold text-[var(--color-foreground)]">
+                    <h5 className="mt-3 mb-1 text-md sm:text-xl font-semibold text-[var(--color-foreground)]">
                       {user?.name}
                     </h5>
                     <span className="text-xs sm:text-sm text-[var(--color-muted-foreground)] truncate max-w-full">
                       {user?.email}
                     </span>
 
-                    <div className="flex mt-4 md:mt-6 justify-center gap-2">
-                      <Button onClick={() => handleEdit(user)}>Edit</Button>
+                    {!isEmployee && (
+                      <div className="flex mt-4 md:mt-6 justify-center gap-2">
+                        <Button size="sm" onClick={() => handleEdit(user)}>
+                          Edit
+                        </Button>
 
-                      <Button
-                        variant="destructive"
-                        onClick={() => handleDeleteUser(user?.id)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDeleteUser(user?.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

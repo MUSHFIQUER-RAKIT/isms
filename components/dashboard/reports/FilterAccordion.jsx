@@ -15,6 +15,7 @@ export default function FilterAccordion({
 }) {
   const [openSection, setOpenSection] = useState(false);
   const ref = useOutsideClick(() => setOpenSection(false));
+
   return (
     <>
       <div ref={ref} className="border-b flex flex-col   gap-3 pb-4 relative ">
@@ -74,7 +75,11 @@ export default function FilterAccordion({
                 onClick={() =>
                   handleFilter(value, value === "created" ? opt.name : opt.id)
                 }
-                className={`flex  flex-col text-left p-2 rounded bg-primary/30 hover:bg-[var(--color-accent)]/50`}
+                className={`flex  flex-col text-left p-2 rounded ${
+                  isIn === opt.name
+                    ? "bg-[var(--color-accent)]/50"
+                    : "bg-primary/30"
+                }  hover:bg-[var(--color-accent)]/50`}
               >
                 {capitalizeFirstLetter(opt.name)}
                 <span> {opt.phone} </span>
