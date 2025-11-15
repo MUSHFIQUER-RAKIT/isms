@@ -267,7 +267,7 @@ export default function ReportsFilters({ customer, createdBy, children }) {
             />
             {reportSort === "outreach" && (
               <FilterAccordion
-                name="Customer"
+                name="Find By Customer"
                 value="customer"
                 options={customer}
                 handleFilter={handleFilter}
