@@ -43,7 +43,7 @@ export async function POST(req) {
     }
 
     const insert = await pool.query(
-      "INSERT INTO outreach (customer_id, customer_name, customer_phone,call_status ,service_status,follow_up_date,note,  created_by) VALUES ($1, $2, $3, $4 ,$5 ,$6 ,$7 ,$8) RETURNING *",
+      "INSERT INTO outreach (customer_id, customer_name, customer_phone,call_status ,service_status,follow_up_date,note,  created_by ,created_by_id) VALUES ($1, $2, $3, $4 ,$5 ,$6 ,$7 ,$8 ,$9) RETURNING *",
       [
         customer_id,
         customer_name,
@@ -53,6 +53,7 @@ export async function POST(req) {
         follow_up_date,
         note,
         session.user.name,
+        session.user.id,
       ]
     );
 

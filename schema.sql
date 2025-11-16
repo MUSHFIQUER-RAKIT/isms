@@ -47,6 +47,7 @@ CREATE TABLE region (
   id SERIAL PRIMARY KEY,
   region TEXT NOT NULL UNIQUE,
   created_by TEXT NOT NULL,
+  created_by_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -56,6 +57,7 @@ CREATE TABLE institute (
   id SERIAL PRIMARY KEY,
   institute TEXT NOT NULL UNIQUE,
   created_by TEXT NOT NULL,
+  created_by_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -71,6 +73,7 @@ CREATE TABLE customer (
   region TEXT NOT NULL,
   institute TEXT NOT NULL,
   created_by TEXT NOT NULL,
+  created_by_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -101,6 +104,7 @@ CREATE TABLE outreach (
   follow_up_date TIMESTAMPTZ,
   note TEXT,
   created_by TEXT NOT NULL,
+  created_by_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -120,6 +124,8 @@ CREATE TABLE comments (
   users_id INT ,
   admin_comment TEXT,
   text TEXT,
+  created_by TEXT NOT NULL,
+  created_by_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );

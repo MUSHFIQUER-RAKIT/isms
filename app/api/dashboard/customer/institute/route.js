@@ -49,8 +49,8 @@ export async function POST(req) {
     }
 
     const insert = await pool.query(
-      "INSERT INTO institute (institute, created_by) VALUES ($1, $2) RETURNING *",
-      [institute, session.user.name]
+      "INSERT INTO institute (institute, created_by ,created_by_id) VALUES ($1, $2 ,$3) RETURNING *",
+      [institute, session.user.name, session.user.id]
     );
 
     await addActivity({

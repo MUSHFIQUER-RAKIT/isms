@@ -46,7 +46,7 @@ export async function POST(req) {
     }
 
     const insert = await pool.query(
-      "INSERT INTO customer (name, email, phone, address, comment, region, institute, created_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      "INSERT INTO customer (name, email, phone, address, comment, region, institute, created_by ,created_by_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8 ,$9) RETURNING *",
       [
         name,
         email,
@@ -56,6 +56,7 @@ export async function POST(req) {
         region,
         institute,
         session.user.name,
+        session.user.id,
       ]
     );
 

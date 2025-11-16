@@ -16,10 +16,19 @@ const sortOptions = [
   { id: "4", value: "This Year" },
   { id: "5", value: "Oldest" },
 ];
+const roleOptions = [
+  { id: "1", name: "OWNER" },
+  { id: "2", name: "EMPLOYEE" },
+];
 
-const report = ["region", "institute", "customer", "outreach"];
+const report = ["region", "institute", "customer", "outreach", "account"];
 
-export default function ReportsFilters({ customer, createdBy, children }) {
+export default function ReportsFilters({
+  customer,
+  createdBy,
+  some,
+  children,
+}) {
   const filters = [
     {
       id: 1,
@@ -37,10 +46,10 @@ export default function ReportsFilters({ customer, createdBy, children }) {
   const [openSection, setOpenSection] = useState();
   const [sortOpen, setSortOpen] = useState(false);
 
+  const ref = useOutsideClick(() => setSortOpen(false));
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
-  const ref = useOutsideClick(() => setSortOpen(false));
 
   // --- FILTER HANDLER ---
 
@@ -54,18 +63,25 @@ export default function ReportsFilters({ customer, createdBy, children }) {
 
   const handleFilter = (sectionId, option) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (isCreated) {
-      params.delete(sectionId);
-    } else {
-      params.set(sectionId, option);
+
+    if (option === "account") {
+      params.delete("created");
+      params.delete("customer");
     }
+    if (["EMPLOYEE", "OWNER"].includes(isCreated)) {
+      params.delete("created");
+    }
+
+    params.set(sectionId, option);
     router.push(`?${params.toString()}`);
   };
+
   function onDeleteParams(name) {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(name);
     router.push(`?${params.toString()}`);
   }
+
   return (
     <div className="text-[var(--color-foreground)]">
       {mobileOpen && (
@@ -166,7 +182,11 @@ export default function ReportsFilters({ customer, createdBy, children }) {
 
           <div className="flex mt-2 lg:gap-4 items-center">
             {/* Restet Icon */}
-
+            {some && (
+              <Button onClick={() => router.push(exportUrl)} variant="primary">
+                <BsFiletypeXlsx /> Export Report
+              </Button>
+            )}
             <Button
               onClick={() => router.replace(pathName)}
               variant="link"
@@ -174,9 +194,7 @@ export default function ReportsFilters({ customer, createdBy, children }) {
             >
               <FaSync /> Reset filter
             </Button>
-            <Button onClick={() => router.push(exportUrl)} variant="primary">
-              <BsFiletypeXlsx /> Export Report
-            </Button>
+
             {/* Sort Dropdown */}
             <div ref={ref} className="relative">
               <button
@@ -199,7 +217,7 @@ export default function ReportsFilters({ customer, createdBy, children }) {
               </button>
 
               {sortOpen && (
-                <div className="absolute right-0 mt-2 bg-primary shadow-lg border rounded w-40 text-sm z-20">
+                <div className="absolute right-0 mt-2 bg-primary/50 backdrop-blur-lg shadow-lg border rounded w-40 text-sm z-20">
                   {sortOptions.map((opt) => (
                     <button
                       key={opt.id}
@@ -207,7 +225,7 @@ export default function ReportsFilters({ customer, createdBy, children }) {
                       onClick={() => handleFilter("sort", opt.id)}
                       className={`w-full text-left p-3 rounded ${
                         activeSort === opt.id && "bg-[var(--color-accent)]"
-                      } hover:bg-[var(--color-accent)]`}
+                      } hover:bg-[var(--color-accent)]/50`}
                     >
                       {opt.value}
                     </button>
@@ -261,14 +279,25 @@ export default function ReportsFilters({ customer, createdBy, children }) {
                 </button>
               ))}
             </div>
-            <FilterAccordion
-              name="Created By"
-              value="created"
-              options={createdBy}
-              handleFilter={handleFilter}
-              isIn={isCreated}
-              handleDelete={onDeleteParams}
-            />
+            {reportSort === "account" ? (
+              <FilterAccordion
+                name="Get by role"
+                value="created"
+                options={roleOptions}
+                handleFilter={handleFilter}
+                isIn={isCreated}
+                handleDelete={onDeleteParams}
+              />
+            ) : (
+              <FilterAccordion
+                name="Created By"
+                value="created"
+                options={createdBy}
+                handleFilter={handleFilter}
+                isIn={isCreated}
+                handleDelete={onDeleteParams}
+              />
+            )}
             {reportSort === "outreach" && (
               <FilterAccordion
                 name="Find By Customer"

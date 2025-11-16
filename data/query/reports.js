@@ -7,7 +7,8 @@ export async function getAllReports(filter = {}, limit = 50) {
     let index = 1;
     let table = null;
     let customerIdColumn = null;
-    let createdByColumn = "created_by";
+    let createdByColumn = "created_by_id";
+    let selectColumns = "*";
 
     const reportType = filter.report || "region";
 
@@ -22,6 +23,12 @@ export async function getAllReports(filter = {}, limit = 50) {
         table = "customer";
         customerIdColumn = "id";
         break;
+      case "account":
+        table = "users";
+        createdByColumn = "role";
+        selectColumns =
+          "id, name, email, role,designation,phone, created_at, updated_at";
+        break;
       case "outreach":
         table = "outreach";
         customerIdColumn = "customer_id";
@@ -35,9 +42,7 @@ export async function getAllReports(filter = {}, limit = 50) {
       values.push(filter.customer);
     }
 
-    // ⭐ FIX APPLIED HERE: Check for filter.created instead of filter.created_by
     if (filter.created) {
-      // Use filter.created value, but the SQL column is created_by
       whereClauses.push(`${createdByColumn} = $${index++}`);
       values.push(filter.created);
     }
@@ -64,7 +69,7 @@ export async function getAllReports(filter = {}, limit = 50) {
       whereClauses.length > 0 ? "WHERE " + whereClauses.join(" AND ") : "";
 
     const sql = `
-      SELECT * FROM ${table}
+      SELECT ${selectColumns} FROM ${table}
       ${whereSQL}
       ${orderBy}
       LIMIT $${index++}

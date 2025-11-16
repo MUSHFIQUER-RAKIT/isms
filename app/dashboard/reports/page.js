@@ -21,7 +21,11 @@ export default async function ReportsPage({ searchParams }) {
 
   return (
     <div className="lg:p-6 flex flex-col gap-6">
-      <ReportsFilters customer={customer} createdBy={createdBy}>
+      <ReportsFilters
+        customer={customer}
+        createdBy={createdBy}
+        some={reports.length > 0}
+      >
         <ReportTable reports={reports} reportType={reportType} />
       </ReportsFilters>
     </div>

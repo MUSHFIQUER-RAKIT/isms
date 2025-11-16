@@ -21,7 +21,7 @@ export default function MakeCallUI({ customers = [] }) {
     customer_phone: "",
     call_status: "",
     service_status: "",
-    follow_up_date: null,
+    follow_up_date: "",
     note: "",
   });
   function resetCustomer() {
@@ -31,7 +31,7 @@ export default function MakeCallUI({ customers = [] }) {
       customer_phone: "",
       call_status: "",
       service_status: "",
-      follow_up_date: null,
+      follow_up_date: "",
       note: "",
     });
     setTextArea("");
@@ -50,7 +50,11 @@ export default function MakeCallUI({ customers = [] }) {
       const res = await fetch(`/api/dashboard/outreach`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...selectedCustomer, note: textArea }),
+        body: JSON.stringify({
+          ...selectedCustomer,
+          follow_up_date: null,
+          note: textArea,
+        }),
       });
       const data = await res.json();
 
@@ -315,7 +319,7 @@ export default function MakeCallUI({ customers = [] }) {
               </div>
             </div>
 
-            {selectedCustomer.service_status && (
+            {selectedCustomer.call_status !== "calling" && (
               <>
                 <textarea
                   value={textArea}

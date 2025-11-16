@@ -48,8 +48,8 @@ export async function POST(req) {
     }
 
     const insert = await pool.query(
-      "INSERT INTO region (region, created_by) VALUES ($1, $2) RETURNING *",
-      [region, session.user.name]
+      "INSERT INTO region (region, created_by, created_by_id) VALUES ($1, $2 ,$3) RETURNING *",
+      [region, session.user.name, session.user.id]
     );
 
     await addActivity({
