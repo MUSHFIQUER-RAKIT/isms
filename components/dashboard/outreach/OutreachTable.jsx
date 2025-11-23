@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/common/Button";
+import { FaEye } from "react-icons/fa";
+
 export default function ({ outreachs = [] }) {
   return (
     <div className="mt-10">
@@ -12,7 +15,7 @@ export default function ({ outreachs = [] }) {
             <th className="p-2">Call Status</th>
             <th className="p-2">Service Status</th>
             <th className="p-2">Follow Up</th>
-            <th className="p-2">Notes</th>
+            <th className="p-2">Comments</th>
           </tr>
         </thead>
         <tbody>
@@ -30,7 +33,18 @@ export default function ({ outreachs = [] }) {
                   ? new Date(o.follow_up_date).toLocaleDateString()
                   : "-"}
               </td>
-              <td className="p-2">{o.note}</td>
+              <td className="p-2">
+                {" "}
+                {o.comment && (
+                  <Button
+                    onClick={() => alert(o.comment)}
+                    variant="outline"
+                    size="xs"
+                  >
+                    <FaEye />
+                  </Button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

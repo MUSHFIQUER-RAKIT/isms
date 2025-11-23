@@ -1,6 +1,6 @@
 import { query } from "@/libs/db";
 
-export async function getAllReports(filter = {}, limit = 50) {
+export async function getAllReports(filter = {}, limit = 1000) {
   try {
     let whereClauses = [];
     let values = [];
@@ -62,6 +62,22 @@ export async function getAllReports(filter = {}, limit = 50) {
       whereClauses.push(`created_at >= DATE_TRUNC('year', CURRENT_DATE)`);
     } else if (sortOption === "5") {
       // Oldest
+      orderBy = "ORDER BY created_at ASC";
+    }
+
+    const filterOption = filter.filter;
+
+    if (filterOption === "1") {
+      whereClauses.push(`call_status = 'successed'`);
+    } else if (filterOption === "2") {
+      whereClauses.push(`call_status = 'declined'`);
+    } else if (filterOption === "3") {
+      whereClauses.push(`service_status = 'accepted'`);
+    } else if (filterOption === "4") {
+      whereClauses.push(`service_status = 'follow_up'`);
+    } else if (filterOption === "5") {
+      whereClauses.push(`service_status = 'cancled'`);
+    } else {
       orderBy = "ORDER BY created_at ASC";
     }
 

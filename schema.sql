@@ -102,7 +102,7 @@ CREATE TABLE outreach (
   service_status TEXT,   -- accepted , follow_up_date, cancled   
 
   follow_up_date TIMESTAMPTZ,
-  note TEXT,
+  comment TEXT,
   created_by TEXT NOT NULL,
   created_by_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),

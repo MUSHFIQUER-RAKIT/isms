@@ -2,13 +2,26 @@ import { getRecentActivities } from "@/actions/server-actions";
 import AnimatedCard from "@/components/common/AnimatedCard";
 import QuickStats from "@/components/dashboard/QuickStats";
 import UserCard from "@/components/dashboard/user/UserCard";
+import { getAllCustomer } from "@/data/query/customer";
+import { getAllReports } from "@/data/query/reports";
+import { getUser } from "@/data/query/user";
 
 export default async function DashboardPage() {
   const activities = await getRecentActivities();
+  const user = await getUser();
+  const customer = await getAllCustomer();
+  const service = await getAllReports({ report: "outreach", filter: "3" });
+  const follow = await getAllReports({ report: "outreach", filter: "4" });
+
   return (
     <>
       {/* Dashboard Cards */}
-      <UserCard />
+      <UserCard
+        user={user.length}
+        customer={customer.length}
+        service={service.length}
+        follow={follow.length}
+      />
 
       {/* Activity Section */}
 

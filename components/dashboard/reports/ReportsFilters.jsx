@@ -3,6 +3,7 @@
 import { Button } from "@/components/common/Button";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { capitalizeFirstLetter } from "@/libs/capitalizeFirstLetter";
+import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { BsFiletypeXlsx } from "react-icons/bs";
@@ -15,6 +16,13 @@ const sortOptions = [
   { id: "3", value: "This Month" },
   { id: "4", value: "This Year" },
   { id: "5", value: "Oldest" },
+];
+const filterOptions = [
+  { id: "1", name: "successed", value: "Call Status: Successed" },
+  { id: "2", name: "declined", value: "Call Status: Declined" },
+  { id: "3", name: "accepted", value: "Service Status: Accepted" },
+  { id: "4", name: "follow", value: "Service Status: Follow Up" },
+  { id: "5", name: "canceled", value: "Service Status: canceled" },
 ];
 const roleOptions = [
   { id: "1", name: "OWNER" },
@@ -45,15 +53,18 @@ export default function ReportsFilters({
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openSection, setOpenSection] = useState();
   const [sortOpen, setSortOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const ref = useOutsideClick(() => setSortOpen(false));
+  const ref2 = useOutsideClick(() => setFilterOpen(false));
+
   const router = useRouter();
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
   // --- FILTER HANDLER ---
-
   const activeSort = searchParams.get("sort");
+  const filterSort = searchParams.get("filter");
   const reportSort = searchParams.get("report") || "region";
   const isCreated = searchParams.get("created");
   const isCustomer = searchParams.get("customer");
@@ -63,6 +74,10 @@ export default function ReportsFilters({
 
   const handleFilter = (sectionId, option) => {
     const params = new URLSearchParams(searchParams.toString());
+
+    if (option !== "outreach") {
+      params.delete("filter");
+    }
 
     if (option === "account") {
       params.delete("created");
@@ -81,7 +96,6 @@ export default function ReportsFilters({
     params.delete(name);
     router.push(`?${params.toString()}`);
   }
-
   return (
     <div className="text-[var(--color-foreground)]">
       {mobileOpen && (
@@ -181,19 +195,35 @@ export default function ReportsFilters({
           </h1>
 
           <div className="flex mt-2 lg:gap-4 items-center">
-            {/* Restet Icon */}
             {some && (
               <Button onClick={() => router.push(exportUrl)} variant="primary">
                 <BsFiletypeXlsx /> Export Report
               </Button>
             )}
-            <Button
-              onClick={() => router.replace(pathName)}
-              variant="link"
-              size="xs"
-            >
-              <FaSync /> Reset filter
-            </Button>
+
+            <motion.div whileTap="tap">
+              <Button
+                onClick={() => router.replace(pathName)}
+                variant="link"
+                size="xs"
+              >
+                <motion.span
+                  variants={{
+                    tap: { rotate: 180 },
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    ease: "easeInOut",
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 10,
+                  }}
+                >
+                  <FaSync />
+                </motion.span>
+                Reset filter
+              </Button>
+            </motion.div>
 
             {/* Sort Dropdown */}
             <div ref={ref} className="relative">
@@ -233,6 +263,47 @@ export default function ReportsFilters({
                 </div>
               )}
             </div>
+            {/* Filter by Dropdown */}
+            {reportSort === "outreach" && (
+              <div ref={ref2} className="relative">
+                <button
+                  onClick={() => setFilterOpen(!filterOpen)}
+                  className="flex items-center gap-1  text-sm font-medium hover:text-[var(--color-foreground)]/70"
+                >
+                  Filter By
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 9l6 6 6-6"
+                    />
+                  </svg>
+                </button>
+
+                {filterOpen && (
+                  <div className="absolute right-0 mt-2 bg-primary/50 backdrop-blur-lg shadow-lg border rounded w-52 text-sm z-20">
+                    {filterOptions.map((opt) => (
+                      <button
+                        key={opt.id}
+                        value={opt.id}
+                        onClick={() => handleFilter("filter", opt.id)}
+                        className={`w-full text-left p-3 rounded ${
+                          filterSort === opt.id && "bg-[var(--color-accent)]"
+                        } hover:bg-[var(--color-accent)]/50`}
+                      >
+                        {opt.value}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Mobile Filter Button */}
             <button
               onClick={() => setMobileOpen(true)}

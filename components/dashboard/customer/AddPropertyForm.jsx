@@ -31,6 +31,10 @@ export default function AddPropertyForm({ title, apiPath, items = [] }) {
       return await dataAction(apiPath, "DELETE", { id });
   }
 
+  const result = items.some((a) => a[apiPath] === value)
+    ? items.filter((a) => a[apiPath] === value)
+    : items;
+
   return (
     <div className="flex flex-col w-full ">
       <h2 className="text-xl font-semibold mb-4 text-[var(--color-accent)] flex items-center gap-2">
@@ -43,7 +47,7 @@ export default function AddPropertyForm({ title, apiPath, items = [] }) {
             name="name"
             value={value}
             onChange={(e) => setValue(e.target.value.toLowerCase())}
-            placeholder={title}
+            placeholder={`Search or Add ${title}`}
             className="p-2 w-2/3  rounded-md bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-foreground)]"
           />
 
@@ -58,15 +62,18 @@ export default function AddPropertyForm({ title, apiPath, items = [] }) {
         </div>
 
         <div className="grid  grid-cols-1 lg:grid-cols-2  xl:grid-cols-3  gap-2 max-h-96 overflow-y-auto">
-          {items.map((item) => (
+          {result.map((item) => (
             <div
               key={item.id}
               className="p-3 flex justify-between rounded-md bg-[var(--color-muted)] text-[var(--color-foreground)] border border-[var(--color-border)]"
             >
-              <div className="flex flex-col">
-                {item[apiPath]}
+              <div className="flex flex-col text-wrap">
+                <span className=" max-w-36 overflow-hidden">
+                  {item[apiPath]}
+                </span>
+
                 <span className="text-xs text-[var(--color-accent)]">
-                  Created on {new Date(item.created_at).toLocaleDateString()} by
+                  Created on {new Date(item.created_at).toLocaleDateString()} by{" "}
                   {item.created_by}
                 </span>
               </div>

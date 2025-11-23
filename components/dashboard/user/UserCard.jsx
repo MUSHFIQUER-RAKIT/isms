@@ -1,31 +1,31 @@
 import AnimatedCard from "@/components/common/AnimatedCard";
 import { FaUser } from "react-icons/fa";
 
-export default function UserCard() {
+export default function UserCard({ user, customer, service, follow }) {
   return (
     <>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {[
           {
             title: "Active user",
-            value: "12",
+            value: user || 1,
             desc: "+12.5% from last month",
             icon: <FaUser />,
           },
           {
-            title: "Total Users",
-            value: 5,
+            title: "Total Customer",
+            value: customer || 0,
+            desc: `+36.5% from last month `,
+          },
+          {
+            title: "Service Accepted",
+            value: service || 0,
             desc: `+12.5% from last month `,
           },
           {
-            title: "Total Users",
-            value: 5,
-            desc: `+12.5% from last month `,
-          },
-          {
-            title: "Total Users",
-            value: 5,
-            desc: `+12.5% from last month `,
+            title: "Service Follow Up",
+            value: follow || 0,
+            desc: "",
           },
         ].map((card, i) => (
           <AnimatedCard

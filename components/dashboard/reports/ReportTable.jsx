@@ -1,3 +1,5 @@
+import CommentBtn from "@/components/common/CommentBtn";
+
 function formatHeader(key) {
   return key.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
@@ -26,9 +28,7 @@ export default function ReportTable({ reports, reportType }) {
   if (!reports || reports.length === 0) {
     return (
       <div className="text-center p-8 bg-[var(--color-card)] shadow rounded-lg border border-border">
-        <p className="text-lg font-semibold ">
-          No {reportType} reports found.
-        </p>
+        <p className="text-lg font-semibold ">No {reportType} reports found.</p>
         <p className="">Try adjusting your filters.</p>
       </div>
     );
@@ -58,14 +58,20 @@ export default function ReportTable({ reports, reportType }) {
               key={report.id || rowIndex}
               className="odd:bg-accent/0 even:bg-accent/10  hover:bg-accent/50"
             >
-              {columns.map((key) => (
-                <td
-                  key={key}
-                  className="px-6  py-4 text-foreground/70 whitespace-nowrap text-sm "
-                >
-                  {formatValue(key, report[key])}
-                </td>
-              ))}
+              {columns.map((key) =>
+                key === "comment" ? (
+                  <td key={key} className="p-2">
+                    {report.comment && <CommentBtn comment={report.comment} />}
+                  </td>
+                ) : (
+                  <td
+                    key={key}
+                    className="px-6  py-4 text-foreground/70 whitespace-nowrap text-sm "
+                  >
+                    {formatValue(key, report[key])}
+                  </td>
+                )
+              )}
             </tr>
           ))}
         </tbody>

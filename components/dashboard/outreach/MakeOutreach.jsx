@@ -22,7 +22,7 @@ export default function MakeCallUI({ customers = [] }) {
     call_status: "",
     service_status: "",
     follow_up_date: "",
-    note: "",
+    comment: "",
   });
   function resetCustomer() {
     setSelectedCustomer({
@@ -32,7 +32,7 @@ export default function MakeCallUI({ customers = [] }) {
       call_status: "",
       service_status: "",
       follow_up_date: "",
-      note: "",
+      comment: "",
     });
     setTextArea("");
   }
@@ -53,7 +53,7 @@ export default function MakeCallUI({ customers = [] }) {
         body: JSON.stringify({
           ...selectedCustomer,
           follow_up_date: null,
-          note: textArea,
+          comment: textArea,
         }),
       });
       const data = await res.json();
@@ -324,7 +324,7 @@ export default function MakeCallUI({ customers = [] }) {
                 <textarea
                   value={textArea}
                   onChange={(e) => setTextArea(e.target.value)}
-                  placeholder="Write a note (optional)..."
+                  placeholder="Write a comment (optional)..."
                   className="p-3 rounded-md bg-[var(--color-input)] border border-[var(--color-border)] shadow-sm min-h-[120px]"
                 />
 
