@@ -1,12 +1,10 @@
 "use client";
 
 import { getSiteSettings, updateSiteSettings } from "@/actions/server-actions";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function WEbForm() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     site_name: "",
     site_title: "",
@@ -80,7 +78,7 @@ export default function WEbForm() {
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className=" flex-col gap-2 hidden">
         <label htmlFor="site_number" className="text-sm text-[var(--muted)]">
           What's app Number
         </label>

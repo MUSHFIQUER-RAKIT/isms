@@ -87,21 +87,25 @@ export default function Aside({ user }) {
 
         <nav className="h-full flex flex-col justify-between">
           <div className="flex flex-col  gap-2">
-            {menuItems.map((item, idx) => (
-              <Link
-                href={item.href}
-                key={idx}
-                onClick={() => setIsSidebarOpen(false)}
-                className={`${
-                  pathName === item.href
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground "
-                    : ""
-                } flex items-center gap-3  p-2 rounded-xl cursor-pointer hover:bg-sidebar-accent`}
-              >
-                <span className="text-[var(--accent)] ">{item.icon}</span>
-                <span>{item.label}</span>
-              </Link>
-            ))}
+            {menuItems.map(
+              (item, idx) =>
+                (user.role ===
+                  "EMPLOYEE" && item.label === "Settings" ? null : (
+                    <Link
+                      href={item.href}
+                      key={idx}
+                      onClick={() => setIsSidebarOpen(false)}
+                      className={`${
+                        pathName === item.href
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground "
+                          : ""
+                      } flex items-center gap-3  p-2 rounded-xl cursor-pointer hover:bg-sidebar-accent`}
+                    >
+                      <span className="text-[var(--accent)] ">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </Link>
+                  ))
+            )}
           </div>
 
           <div className="text-center ">
@@ -116,7 +120,7 @@ export default function Aside({ user }) {
                 transition={{ duration: 0.6, ease: "easeInOut" }}
               >
                 <Link
-                  href="/dashboard/settings"
+                  href="/dashboard/account"
                   onClick={() => setIsSidebarOpen(false)}
                   className="flex items-center gap-3 p-2 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                 >

@@ -171,14 +171,7 @@ export default function AddCustomerForm({ regions, institutes, customers }) {
                     )}
                   </td>
                   <td className="p-2 flex gap-1  justify-center">
-                    <Button
-                      onClick={() => makeCall(c)}
-                      variant="glass"
-                      size="xs"
-                      className="text-green-600"
-                    >
-                      <FaPhone />
-                    </Button>
+                  
                     {editId === c.id ? (
                       <Button
                         onClick={() => {

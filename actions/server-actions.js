@@ -8,7 +8,7 @@ export async function getSiteSettings() {
     const res = await query("SELECT * FROM site_settings LIMIT 1");
     return (
       res.rows[0] || {
-        site_name: "Isms",
+        site_name: "Progress Tracker",
         site_number: "8801793092241",
         site_title: "World-Class Hosting",
       }

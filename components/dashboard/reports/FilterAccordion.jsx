@@ -15,6 +15,17 @@ export default function FilterAccordion({
 }) {
   const [openSection, setOpenSection] = useState(false);
   const ref = useOutsideClick(() => setOpenSection(false));
+
+  const [searchTerm, setsearchTerm] = useState("");
+
+  const result = options.filter((a) => {
+    const term = searchTerm.toLowerCase();
+    const name = (a.name || "").toLowerCase();
+    const phone = (a.phone || "").toLowerCase();
+
+    return name.includes(term) || phone.includes(term);
+  });
+
   return (
     <>
       <div ref={ref} className="border-b flex flex-col   gap-3 pb-4 relative ">
@@ -67,29 +78,38 @@ export default function FilterAccordion({
         )}
 
         {openSection && (
-          <div className="mt-3 max-h-48 overflow-y-auto text-xs flex flex-wrap gap-2  space-y-2">
-            {options.map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() =>
-                  handleFilter(
-                    value,
-                    name === "Get by role" ? opt.name : opt.id
-                  )
-                }
-                className={`flex  flex-col text-left p-2 rounded ${
-                  Number(isIn) === opt.id
-                    ? "bg-[var(--color-accent)]/50"
-                    : isIn === opt.name
-                    ? "bg-[var(--color-accent)]/50"
-                    : "bg-primary/30"
-                }  hover:bg-[var(--color-accent)]/50`}
-              >
-                {capitalizeFirstLetter(opt.name)}
-                <span> {opt.phone} </span>
-              </button>
-            ))}
-          </div>
+          <>
+            <input
+              name="name"
+              value={searchTerm}
+              onChange={(e) => setsearchTerm(e.target.value.toLowerCase())}
+              placeholder="Search or select"
+              className="p-2 w-full rounded-md bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-foreground)]"
+            />
+            <div className="mt-3 max-h-48 overflow-y-auto text-xs flex flex-wrap gap-2  space-y-2">
+              {result.map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() =>
+                    handleFilter(
+                      value,
+                      name === "Get by role" ? opt.name : opt.id
+                    )
+                  }
+                  className={`flex  flex-col text-left p-2 rounded ${
+                    Number(isIn) === opt.id
+                      ? "bg-[var(--color-accent)]/50"
+                      : isIn === opt.name
+                      ? "bg-[var(--color-accent)]/50"
+                      : "bg-primary/30"
+                  }  hover:bg-[var(--color-accent)]/50`}
+                >
+                  {capitalizeFirstLetter(opt.name)}
+                  <span> {opt.phone} </span>
+                </button>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </>

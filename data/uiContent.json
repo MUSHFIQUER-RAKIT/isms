@@ -2,7 +2,7 @@
   "navBar": [
     { "id": 1, "name": "Dashboard", "href": "/dashboard" },
     { "id": 2, "name": "Add Employee", "href": "/register" },
-    { "id": 3, "name": "Add Product", "href": "/dashboard/product" },
+    { "id": 3, "name": "Add Customer", "href": "/dashboard/customer" },
     { "id": 4, "name": "Outreach", "href": "/dashboard/outreach" }
   ]
 }

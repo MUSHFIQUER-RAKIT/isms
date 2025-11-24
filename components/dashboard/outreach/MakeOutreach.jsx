@@ -37,9 +37,13 @@ export default function MakeCallUI({ customers = [] }) {
     setTextArea("");
   }
 
-  const filteredCustomers = customers.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCustomers = customers.filter((a) => {
+    const term = search.toLowerCase();
+    const name = (a.name || "").toLowerCase();
+    const phone = (a.phone || "").toLowerCase();
+
+    return name.includes(term) || phone.includes(term);
+  });
 
   const entries = Object.entries(selectedCustomer);
 
