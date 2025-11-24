@@ -4,32 +4,35 @@ import * as XLSX from "xlsx";
 
 export async function GET(request) {
   try {
-    // 1. Get search parameters (filters) from the URL
+    // 1. Read URL params
     const { searchParams } = new URL(request.url);
     const filter = Object.fromEntries(searchParams.entries());
 
-    // Set a default report type if none is provided (to match your reports page logic)
-    const reportType = filter.report || "outreach";
+    // If no report is given, default to outreach
+    const reportType = filter.report || "region";
 
-    // 2. Fetch the data using your existing function
-    const reports = await getAllReports(
+    // Remove pagination (we want full dataset)
+    delete filter.page;
+    delete filter.limit;
+
+    // 2. Fetch ALL rows for export
+    const { data } = await getAllReports(
       { ...filter, report: reportType },
-      5000
-    ); // Increased limit for export
+      5000, // large limit to export everything
+      1
+    );
 
-    if (!reports || reports.length === 0) {
-      return new NextResponse(
-        JSON.stringify({
-          message: `No data found for report type: ${reportType}`,
-        }),
-        { status: 404, headers: { "Content-Type": "application/json" } }
+    if (!data || data.length === 0) {
+      return NextResponse.json(
+        { message: `No data found for report type: ${reportType}` },
+        { status: 404 }
       );
     }
 
-    // 3. Convert the JSON array to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(reports);
+    // 3. Convert JSON → Excel sheet
+    const worksheet = XLSX.utils.json_to_sheet(data);
 
-    // 4. Create a new workbook and append the worksheet
+    // 4. Create workbook
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(
       workbook,
@@ -37,13 +40,13 @@ export async function GET(request) {
       reportType.toUpperCase() + "_DATA"
     );
 
-    // 5. Generate the Excel file buffer (binary data)
+    // 5. Convert workbook → Buffer
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "buffer",
     });
 
-    // 6. Return the file as a downloadable response
+    // 6. Send Excel file
     return new NextResponse(excelBuffer, {
       status: 200,
       headers: {
@@ -52,17 +55,16 @@ export async function GET(request) {
           .slice(0, 10)}.xlsx"`,
         "Content-Type":
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Length": excelBuffer.length,
       },
     });
   } catch (error) {
-    console.error("Error during Excel export:", error);
-    return new NextResponse(
-      JSON.stringify({
+    console.error("Export Error:", error);
+    return NextResponse.json(
+      {
         message: "Error generating Excel file.",
         error: error.message,
-      }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      },
+      { status: 500 }
     );
   }
 }

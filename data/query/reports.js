@@ -1,6 +1,6 @@
 import { query } from "@/libs/db";
 
-export async function getAllReports(filter = {}, limit = 1000) {
+export async function getAllReports(filter = {}, limit = 5000000000, page = 1) {
   try {
     let whereClauses = [];
     let values = [];
@@ -27,7 +27,7 @@ export async function getAllReports(filter = {}, limit = 1000) {
         table = "users";
         createdByColumn = "role";
         selectColumns =
-          "id, name, email, role,designation,phone, created_at, updated_at";
+          "id, name, email, role, designation, phone, created_at, updated_at";
         break;
       case "outreach":
         table = "outreach";
@@ -36,6 +36,8 @@ export async function getAllReports(filter = {}, limit = 1000) {
       default:
         throw new Error("Invalid or missing report type.");
     }
+
+    // 🔍 FILTERING LOGIC
 
     if (filter.customer && customerIdColumn) {
       whereClauses.push(`${customerIdColumn} = $${index++}`);
@@ -47,21 +49,17 @@ export async function getAllReports(filter = {}, limit = 1000) {
       values.push(filter.created);
     }
 
-    let orderBy = "ORDER BY created_at DESC";
+    let orderBy = "ORDER BY created_at ASC";
 
     const sortOption = filter.sort;
 
     if (sortOption === "2") {
-      // This Week
       whereClauses.push(`created_at >= NOW() - INTERVAL '7 days'`);
     } else if (sortOption === "3") {
-      // This Month
       whereClauses.push(`created_at >= DATE_TRUNC('month', CURRENT_DATE)`);
     } else if (sortOption === "4") {
-      // This Year
       whereClauses.push(`created_at >= DATE_TRUNC('year', CURRENT_DATE)`);
     } else if (sortOption === "5") {
-      // Oldest
       orderBy = "ORDER BY created_at ASC";
     }
 
@@ -77,25 +75,50 @@ export async function getAllReports(filter = {}, limit = 1000) {
       whereClauses.push(`service_status = 'follow_up'`);
     } else if (filterOption === "5") {
       whereClauses.push(`service_status = 'cancled'`);
-    } else {
-      orderBy = "ORDER BY created_at ASC";
     }
 
     const whereSQL =
       whereClauses.length > 0 ? "WHERE " + whereClauses.join(" AND ") : "";
 
+    //  PAGINATION
+    const offset = (page - 1) * limit;
+
+    // Count query for pagination
+    const countSql = `
+      SELECT COUNT(*) AS total
+      FROM ${table}
+      ${whereSQL}
+    `;
+    const countResult = await query(countSql, values);
+    const totalItems = parseInt(countResult.rows[0].total, 10);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    // MAIN DATA QUERY
     const sql = `
       SELECT ${selectColumns} FROM ${table}
       ${whereSQL}
       ${orderBy}
-      LIMIT $${index++}
+      LIMIT $${index}
+      OFFSET $${index + 1}
     `;
-    values.push(limit);
 
-    const result = await query(sql, values);
+    const finalValues = [...values, limit, offset];
 
-    return result.rows || [];
+    const result = await query(sql, finalValues);
+
+    return {
+      data: result.rows || [],
+      pagination: {
+        page,
+        limit,
+        totalItems,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    };
   } catch (err) {
     console.error(`Error fetching reports for type:`, err);
+    return { data: [], pagination: {} };
   }
 }

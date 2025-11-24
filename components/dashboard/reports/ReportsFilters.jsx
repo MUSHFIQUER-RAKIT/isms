@@ -75,6 +75,14 @@ export default function ReportsFilters({
   const handleFilter = (sectionId, option) => {
     const params = new URLSearchParams(searchParams.toString());
 
+    if (
+      ["region", "institute", "customer", "outreach", "account"].includes(
+        option
+      )
+    ) {
+      params.delete("page");
+    }
+
     if (option !== "outreach") {
       params.delete("filter");
     }

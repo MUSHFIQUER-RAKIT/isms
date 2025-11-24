@@ -1,3 +1,4 @@
+import Pagination from "@/components/common/Pagination";
 import ReportsFilters from "@/components/dashboard/reports/ReportsFilters";
 import ReportTable from "@/components/dashboard/reports/ReportTable";
 import { getAllCustomer } from "@/data/query/customer";
@@ -17,16 +18,23 @@ export default async function ReportsPage({ searchParams }) {
 
   const params = await searchParams;
   const reportType = params.report || "region";
-  const reports = await getAllReports({ ...params, report: reportType });
+
+  const { data, pagination } = await getAllReports(
+    { ...params, report: reportType },
+    10,
+    Number(params.page) || 1
+  );
 
   return (
     <div className="lg:p-6 flex flex-col gap-6">
       <ReportsFilters
         customer={customer}
         createdBy={createdBy}
-        some={reports.length > 0}
+        some={data.length > 0}
       >
-        <ReportTable reports={reports} reportType={reportType} />
+        <ReportTable reports={data} reportType={reportType} />
+
+        <Pagination pagination={pagination} />
       </ReportsFilters>
     </div>
   );
